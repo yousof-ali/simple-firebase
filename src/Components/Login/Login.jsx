@@ -1,11 +1,12 @@
-import { GoogleAuthProvider, GithubAuthProvider, getAuth, signInWithPopup, signOut } from "firebase/auth";
+import { GoogleAuthProvider, TwitterAuthProvider, GithubAuthProvider, getAuth, signInWithPopup, signOut } from "firebase/auth";
 import app from "../../firebase/firebase.init";
 import { useState } from "react";
 
 const Login = () => {
     const auth = getAuth(app)
     const googleProvider = new GoogleAuthProvider();
-    const githubProvider = new GithubAuthProvider()
+    const githubProvider = new GithubAuthProvider();
+    const twitterProvider = new TwitterAuthProvider();
     const [user, setUser] = useState(null)
 
     const handleGoogleSingIn = () => {
@@ -35,6 +36,17 @@ const Login = () => {
         })
 
     }
+    const handleTwitterSingIn = ()=>{
+        signInWithPopup(auth,twitterProvider)
+        .then(result=>{
+            const twitterUser = result.user
+            setUser(twitterUser);
+            console.log(twitterUser);
+        })
+        .catch(error =>{
+            console.log(error.massage);
+        })
+    }
     return (
         <div className="container mx-auto my-8">
             <div className="">
@@ -42,7 +54,8 @@ const Login = () => {
                     <button className="bg-gray-200 p-2" onClick={handleGoogleSingOut}>Sing Out</button> :
                     <div>
                         <button className="bg-gray-200 p-2 mr-4" onClick={handleGoogleSingIn}>Log in with Google</button>
-                        <button className="bg-gray-200 p-2" onClick={handleGithubSingIn}>Log in with GitHub</button>
+                        <button className="bg-gray-200 p-2 mr-4" onClick={handleGithubSingIn}>Log in with GitHub</button>
+                        <button className="bg-gray-200 p-2" onClick={handleTwitterSingIn}>Log in with Twitter</button>
                     </div>
 
                 }
